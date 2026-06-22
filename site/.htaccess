@@ -1,0 +1,27 @@
+# PinMedia — настройки сервера
+# Этот файл загружается в ту же папку, что index.html.
+# Из-за точки в начале имени он может быть «невидимым» в проводнике — это нормально.
+
+# Перенаправление на HTTPS делает хостинг (включено в панели Timeweb),
+# поэтому здесь редирект НЕ дублируем — иначе возникает петля ERR_TOO_MANY_REDIRECTS.
+
+# --- Немного безопасности ---
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Закрываем конфиг с токеном бота от прямых запросов
+<FilesMatch "^config\.php$">
+  Require all denied
+</FilesMatch>
+
+# --- Кэширование статики, чтобы сайт летал ---
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png  "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+</IfModule>
